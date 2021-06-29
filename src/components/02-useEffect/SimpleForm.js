@@ -1,4 +1,5 @@
 import React, {useEffect,useState} from "react"
+import { Message } from "./Message"
 import './effects.css'
 
 export const SimpleForm = () => {
@@ -11,15 +12,15 @@ export const SimpleForm = () => {
     const{name,email} = formState
 
     useEffect(()=>{
-        console.log('diapra useEffect')
+        //console.log('diapra useEffect')
     },[])
 
     useEffect(()=>{
-        console.log('cambia FormState')
+       // console.log('cambia FormState')
     },[formState])
 
     useEffect(()=>{
-        console.log('email cambio')
+       // console.log('email cambio')
     },[email])
     
     const handleInputChenge = ({target}) =>{
@@ -39,8 +40,11 @@ export const SimpleForm = () => {
    
    
         <div className="form-group" >
-            <input type="text" name="email" className="form-control" placeholder="email@gmail.com" autoComplete="off" value={name} onChange={handleInputChenge}/> 
+            <input type="text" name="email" className="form-control" placeholder="email@gmail.com" autoComplete="off" value={email} onChange={handleInputChenge}/> 
         </div>
+
+        {(name === '1234' ) && <Message/>}
+
         </>
     )
 
