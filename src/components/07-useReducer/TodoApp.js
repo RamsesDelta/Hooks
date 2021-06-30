@@ -5,11 +5,14 @@ import './syteles.css'
 
 
 const init = () =>{
-    return [{
+
+    return JSON.parse(localStorage.getItem('todos')) || []
+
+    /*return [{
         id: new Date().getTime(),
         desc: 'Aprender React',
         done: false
-    }]
+    }]*/
 }
 
 export const TodoApp = () => {
@@ -24,6 +27,24 @@ export const TodoApp = () => {
     useEffect(() => {
        localStorage.setItem('todos',JSON.stringify(todos))
     }, [todos])
+
+
+    const handleDelete = (todoId) =>{
+        
+        const action = {
+            type:'delete',
+            payload:todoId
+        }
+        dispath(action)
+    }
+
+
+    const hangleToggle = (todoId) => {
+        dispath({
+            type: 'toggle',
+            payload: todoId
+        })
+    }
 
     console.log(description)
 
@@ -57,8 +78,8 @@ export const TodoApp = () => {
                 {
                     todos.map((todo,i)=>(
                         <li key={todo.id} className="list-group-item">
-                            <p className="text-center">{i+1}. {todo.desc}</p>
-                            <button className="btn btn-danger">Borrar</button>
+                            <p className={`${todo.done && 'complete'}`} onClick={()=>hangleToggle(todo.id)}>{i+1}. {todo.desc}</p>
+                            <button className="btn btn-danger" onClick={()=> handleDelete(todo.id)}>Borrar</button>
                         </li>
                     ))
                 }
