@@ -1,24 +1,42 @@
-import React, { useReducer } from "react"
+import React, { useReducer,useEffect } from "react"
 import { todoReducer } from "./todoReducer"
+import { useForm } from "../../hooks/useForm"
 import './syteles.css'
-const initialState = [{
-    id: new Date().getTime(),
-    desc: 'Aprender React',
-    done: false
-}]
+
+
+const init = () =>{
+    return [{
+        id: new Date().getTime(),
+        desc: 'Aprender React',
+        done: false
+    }]
+}
 
 export const TodoApp = () => {
 
-    const [todos,dispath] = useReducer(todoReducer,initialState)
+    const [todos,dispath] = useReducer(todoReducer,[],init)
 
-    console.log(todos)
+    const [{description},handleInputChange,reset] = useForm({
+        description:''
+    })
+
+
+    useEffect(() => {
+       localStorage.setItem('todos',JSON.stringify(todos))
+    }, [todos])
+
+    console.log(description)
 
     const handleSubmit = (e) =>{
         e.preventDefault()
 
+        if(description.trim().length <= 1){
+            return
+        }
+
         const newTodo = {
             id: new Date().getTime(),
-            desc: 'Nueva tarea',
+            desc: description,
             done: false
         }
 
@@ -27,6 +45,7 @@ export const TodoApp = () => {
             payload: newTodo
         }
         dispath(action)
+        reset()
     }
 
     return(
@@ -54,6 +73,8 @@ export const TodoApp = () => {
                         className="form-control"
                         placeholder="Aprender ...."
                         autoComplete="off"
+                        value={description}
+                        onChange={handleInputChange}
                     />
                     <button type="submit"  className="btn btn-outline-primary mt-1 btn-block">Agregar</button>
                 </form>
